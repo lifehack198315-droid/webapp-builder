@@ -1,0 +1,42 @@
+{
+  "tiers": {
+    "starter": {
+      "label": "Starter",
+      "pages": 3,
+      "features": [
+        "Single-page or small website",
+        "Mobile responsive",
+        "Contact form",
+        "Basic SEO"
+      ],
+      "cta": "Launch Fast",
+      "upsell": "Upgrade to Pro for automations and branding"
+    },
+    "pro": {
+      "label": "Pro",
+      "pages": 7,
+      "features": [
+        "Multi-page website",
+        "Booking or lead forms",
+        "Email automation",
+        "On-page SEO",
+        "Analytics"
+      ],
+      "cta": "Scale My Business",
+      "upsell": "Upgrade to Elite for full brand system"
+    },
+    "elite": {
+      "label": "Elite",
+      "pages": 12,
+      "features": [
+        "Custom UI/UX",
+        "Brand identity",
+        "AI assistant integration",
+        "Advanced automations",
+        "Performance optimization"
+      ],
+      "cta": "Build My Empire",
+      "upsell": null
+    }
+  }
+}
