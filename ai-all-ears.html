@@ -36,7 +36,6 @@
 </head>
 
 <body>
-
 <div class="page">
 
   <!-- ================= HEADER ================= -->
@@ -68,17 +67,17 @@
       <!-- SETTINGS -->
       <div class="toolbar">
         <div>
-          <label class="label">Language</label>
+          <label class="label" for="lang">Language</label>
           <select id="lang"></select>
         </div>
 
         <div>
-          <label class="label">Tier</label>
+          <label class="label" for="tier">Tier</label>
           <select id="tier"></select>
         </div>
 
         <div>
-          <label class="label">Industry</label>
+          <label class="label" for="industry">Industry</label>
           <input id="industry" class="input" placeholder="credit repair, agency, roofing…" />
         </div>
 
@@ -98,10 +97,10 @@
 
       <!-- MIC CONTROLS -->
       <div class="pill-row">
-        <button id="btnStart" class="pill pill-primary">🎙️ Start</button>
-        <button id="btnStop" class="pill pill-ghost" disabled>⏹ Stop</button>
-        <button id="btnClear" class="pill pill-ghost">🧼 Clear</button>
-        <button id="btnUndo" class="pill pill-ghost" disabled>↩ Undo</button>
+        <button id="btnStart" class="pill pill-primary" type="button">🎙️ Start</button>
+        <button id="btnStop" class="pill pill-ghost" type="button" disabled>⏹ Stop</button>
+        <button id="btnClear" class="pill pill-ghost" type="button">🧼 Clear</button>
+        <button id="btnUndo" class="pill pill-ghost" type="button" disabled>↩ Undo</button>
       </div>
 
       <div class="status">
@@ -110,7 +109,7 @@
       </div>
 
       <!-- MAIN INPUT -->
-      <label class="label">Your Vision</label>
+      <label class="label" for="inputText">Your Vision</label>
       <textarea id="inputText" class="textarea" rows="8"
         placeholder="Explain your website idea, features, goals, vibe…"></textarea>
 
@@ -118,7 +117,7 @@
       <div style="margin-top:16px;">
         <label class="label">Live transcript</label>
         <div id="liveText" class="liveBox">—</div>
-        <button id="btnInsertLive" class="pill pill-ghost" disabled style="margin-top:8px;">➕ Insert Live</button>
+        <button id="btnInsertLive" class="pill pill-ghost" type="button" disabled style="margin-top:8px;">➕ Insert Live</button>
       </div>
 
       <!-- QUICK INTERVIEW -->
@@ -135,9 +134,9 @@
 
       <!-- ACTION BUTTONS -->
       <div class="pill-row">
-        <button id="btnBrief" class="pill pill-primary">⚡ Generate Project Brief</button>
-        <button id="btnCopyBrief" class="pill" disabled>📋 Copy Brief</button>
-        <button id="btnDownloadBrief" class="pill pill-ghost" disabled>⬇ Download .txt</button>
+        <button id="btnBrief" class="pill pill-primary" type="button">⚡ Generate Project Brief</button>
+        <button id="btnCopyBrief" class="pill" type="button" disabled>📋 Copy Brief</button>
+        <button id="btnDownloadBrief" class="pill pill-ghost" type="button" disabled>⬇ Download .txt</button>
       </div>
 
     </section>
@@ -197,29 +196,43 @@
     questions: JSON.parse(document.getElementById("all-ears-questions").textContent)
   };
 
-  // populate selects
-  const cfg = ALL_EARS.config;
+  // safe refs
+  const $lang = document.getElementById("lang");
+  const $tier = document.getElementById("tier");
+  const $questionList = document.getElementById("questionList");
+
+  // populate selects + questions
+  const cfg = window.ALL_EARS.config;
   document.getElementById("year").textContent = new Date().getFullYear();
+
   cfg.input.supportedLanguages.forEach(l => {
-    const o = document.createElement("option"); o.value = l; o.textContent = l;
+    const o = document.createElement("option");
+    o.value = l;
+    o.textContent = l;
     if (l === cfg.app.defaultLanguage) o.selected = true;
-    lang.appendChild(o);
+    $lang.appendChild(o);
   });
-  Object.entries(ALL_EARS.tiers.tiers).forEach(([k,v]) => {
-    const o = document.createElement("option"); o.value=k; o.textContent=`${v.label} (${v.pages} pages)`;
-    tier.appendChild(o);
+
+  Object.entries(window.ALL_EARS.tiers.tiers).forEach(([k,v]) => {
+    const o = document.createElement("option");
+    o.value = k;
+    o.textContent = `${v.label} (${v.pages} pages)`;
+    $tier.appendChild(o);
   });
-  ALL_EARS.questions.coreQuestions.forEach(q => {
+
+  window.ALL_EARS.questions.coreQuestions.forEach(q => {
     const d = document.createElement("div");
-    d.className="qRow";
-    d.innerHTML = `<label class="label">${q.question}</label>
-                   <input class="input qInput" data-qid="${q.id}" />`;
-    questionList.appendChild(d);
+    d.className = "qRow";
+    d.innerHTML = `
+      <label class="label">${q.question}</label>
+      <input class="input qInput" data-qid="${q.id}" placeholder="Type your answer..." />
+    `;
+    $questionList.appendChild(d);
   });
 </script>
 
 <!-- ================= MAIN LOGIC ================= -->
-<script defer src="all-ears.js"></script>
+<script defer src="./all-ears.js"></script>
 
 </body>
 </html>
