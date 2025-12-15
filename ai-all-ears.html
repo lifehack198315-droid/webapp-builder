@@ -1,0 +1,83 @@
+<section class="card hero">
+  <h1>AI All Ears 🎧</h1>
+  <p>Talk or type. We convert it into a build-ready project brief.</p>
+
+  <div class="toolbar">
+    <select id="lang" class="input">
+      <option value="en-US">English (US)</option>
+      <option value="en-GB">English (UK)</option>
+      <option value="es-US">Spanish (US)</option>
+    </select>
+
+    <label class="checkbox">
+      <input id="continuous" type="checkbox" checked />
+      <span>Continuous</span>
+    </label>
+
+    <label class="checkbox">
+      <input id="interim" type="checkbox" checked />
+      <span>Live preview</span>
+    </label>
+
+    <div class="counter">
+      <span id="wordCount">0</span> words
+    </div>
+  </div>
+
+  <div class="pill-row">
+    <button id="btnStart" class="pill pill-primary">🎙️ Start</button>
+    <button id="btnStop" class="pill pill-ghost" disabled>⏹ Stop</button>
+    <button id="btnClear" class="pill pill-ghost">🧼 Clear</button>
+    <button id="btnUndo" class="pill pill-ghost" disabled>↩ Undo</button>
+  </div>
+
+  <div class="status">
+    <span id="micDot" class="dot"></span>
+    <span id="statusText">Mic idle</span>
+  </div>
+
+  <label class="label">Your Vision</label>
+  <textarea id="inputText" class="textarea" rows="10"
+    placeholder="Describe your business + the website you want…"></textarea>
+
+  <div class="liveWrap">
+    <div class="labelRow">
+      <span class="label">Live transcript (not saved until finalized)</span>
+      <button id="btnInsertLive" class="pill pill-ghost" disabled>➕ Insert Live</button>
+    </div>
+    <div id="liveText" class="liveBox">—</div>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <label class="label">Tier</label>
+      <select id="tier" class="input">
+        <option value="starter">Starter (1–3 pages)</option>
+        <option value="pro">Pro (5–7 pages + automation)</option>
+        <option value="elite">Elite (custom build + brand)</option>
+      </select>
+    </div>
+    <div>
+      <label class="label">Industry</label>
+      <input id="industry" class="input" placeholder="credit repair, roofing, salon…" />
+    </div>
+  </div>
+
+  <label class="checkbox">
+    <input id="consent" type="checkbox" />
+    <span>I won’t share sensitive info. I understand this is not medical/legal advice.</span>
+  </label>
+
+  <div class="pill-row">
+    <button id="btnBrief" class="pill pill-primary">⚡ Generate Project Brief</button>
+    <button id="btnCopyBrief" class="pill" disabled>📋 Copy Brief</button>
+    <button id="btnDownloadBrief" class="pill pill-ghost" disabled>⬇ Download .txt</button>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Your Build-Ready Brief</h2>
+  <pre id="briefOut" class="pre">Nothing yet.</pre>
+</section>
+
+<script defer src="all-ears.js"></script>
