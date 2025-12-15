@@ -1,0 +1,25 @@
+{
+  "projectBrief": {
+    "industry": "",
+    "tier": "",
+    "vision": "",
+    "goals": [],
+    "features": [],
+    "pages": [],
+    "style": {
+      "colors": "",
+      "fonts": "",
+      "vibe": ""
+    },
+    "callsToAction": {
+      "primary": "",
+      "secondary": ""
+    },
+    "clientNeeds": [],
+    "nextSteps": [
+      "Confirm scope",
+      "Collect deposit",
+      "Schedule kickoff"
+    ]
+  }
+}
