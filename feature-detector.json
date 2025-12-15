@@ -1,0 +1,10 @@
+{
+  "featureKeywords": {
+    "booking": ["book", "appointment", "schedule", "calendar"],
+    "payments": ["pay", "checkout", "stripe", "square", "sell"],
+    "ecommerce": ["store", "shop", "products", "cart"],
+    "reviews": ["reviews", "testimonials", "ratings", "google reviews"],
+    "gallery": ["photos", "portfolio", "gallery", "images"],
+    "ai": ["AI", "chatbot", "assistant", "automation"]
+  }
+}
