@@ -1,0 +1,13 @@
+.toolbar{display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin:14px 0;}
+.counter{opacity:.85; font-weight:600;}
+.liveWrap{margin-top:14px;}
+.labelRow{display:flex; justify-content:space-between; align-items:center; gap:10px; margin:8px 0;}
+.liveBox{
+  min-height:44px; padding:12px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.18);
+  border-radius:14px;
+  white-space:pre-wrap;
+}
+.dot{display:inline-block; width:10px; height:10px; border-radius:999px; background:rgba(255,255,255,.25); margin-right:8px;}
+.dot.on{background:#35ff9a; box-shadow:0 0 12px rgba(53,255,154,.45);}
