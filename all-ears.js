@@ -1,6 +1,8 @@
 (() => {
   // --------- DOM ----------
   const el = (id) => document.getElementById(id);
+  const qs = (sel, root = document) => root.querySelector(sel);
+  const qsa = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
   const btnStart = el("btnStart");
   const btnStop = el("btnStop");
@@ -15,7 +17,7 @@
   const inputText = el("inputText");
   const liveText = el("liveText");
 
-  const tier = el("tier");
+  const tierSel = el("tier");
   const industry = el("industry");
   const consent = el("consent");
 
@@ -28,6 +30,18 @@
   const statusText = el("statusText");
 
   const briefOut = el("briefOut");
+  const jsonOut = el("jsonOut"); // <— new output panel
+
+  // --------- CONFIG (from embedded JSON) ----------
+  const ALL = window.ALL_EARS || {};
+  const CFG = ALL.config || {};
+  const TIERS = (ALL.tiers && ALL.tiers.tiers) ? ALL.tiers.tiers : {};
+  const QUESTIONS = (ALL.questions && ALL.questions.coreQuestions) ? ALL.questions.coreQuestions : [];
+
+  const STORAGE_KEY =
+    (CFG.storage && CFG.storage.draftKey) ? CFG.storage.draftKey : "all_ears_draft_v1";
+  const BRIEF_KEY =
+    (CFG.storage && CFG.storage.briefKey) ? CFG.storage.briefKey : "all_ears_brief_v1";
 
   // --------- STATE ----------
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -36,7 +50,6 @@
 
   let lastSavedText = "";
   let undoStack = [];
-  const STORAGE_KEY = "all_ears_draft_v1";
 
   // --------- UTIL ----------
   const debounce = (fn, ms = 250) => {
@@ -104,14 +117,19 @@
   }
 
   function normalizeFinal(text) {
-    // Light cleanup: spacing + capitalize first letter
     let t = (text || "").replace(/\s+/g, " ").trim();
     if (!t) return "";
     t = t.charAt(0).toUpperCase() + t.slice(1);
-
-    // Add a period if it looks like a sentence and doesn't end with punctuation.
     if (!/[.!?]$/.test(t) && t.length > 20) t += ".";
     return t;
+  }
+
+  function safeJSON(obj) {
+    try {
+      return JSON.stringify(obj, null, 2);
+    } catch {
+      return "JSON error.";
+    }
   }
 
   // --------- DRAFT SAVE/LOAD ----------
@@ -122,6 +140,9 @@
       lastSavedText = inputText.value;
       pushUndoSnapshot();
       updateWordCount();
+
+      const savedBrief = localStorage.getItem(BRIEF_KEY);
+      if (savedBrief && jsonOut) jsonOut.textContent = savedBrief;
     } catch (_) {}
   }
 
@@ -165,7 +186,6 @@
     };
 
     rec.onerror = (e) => {
-      // Common: "not-allowed", "no-speech", "audio-capture"
       listening = false;
       setStatus({
         on: false,
@@ -192,7 +212,6 @@
         else currentInterim += transcript;
       }
 
-      // Show live preview
       if (interim.checked && currentInterim.trim()) {
         liveText.textContent = currentInterim.trim();
       } else {
@@ -201,7 +220,6 @@
 
       btnInsertLive.disabled = liveText.textContent === "—";
 
-      // Commit final text to textarea
       if (finalChunk.trim()) {
         const cleaned = normalizeFinal(finalChunk);
         pushUndoSnapshot();
@@ -216,13 +234,11 @@
     if (!rec) initSpeech();
     if (!rec) return;
 
-    // Refresh settings each time
     rec.lang = lang.value;
     rec.continuous = continuous.checked;
     rec.interimResults = interim.checked;
 
     try {
-      // Safari/permissions: user gesture is required (button click)
       rec.start();
     } catch (e) {
       setStatus({ on: false, dot: false, text: "Could not start mic. Try again." });
@@ -235,10 +251,27 @@
     } catch (_) {}
   }
 
+  // --------- INTERVIEW (Quick Questions) ----------
+  function getInterviewAnswers() {
+    const inputs = qsa(".qInput");
+    const answers = {};
+    inputs.forEach((inp) => {
+      const id = inp.getAttribute("data-qid") || "";
+      const val = (inp.value || "").trim();
+      if (id) answers[id] = val;
+    });
+    return answers;
+  }
+
+  function getQuestionTextMap() {
+    const map = {};
+    QUESTIONS.forEach(q => { map[q.id] = q.question; });
+    return map;
+  }
+
   // --------- BRIEF GENERATOR ----------
   function extractGoals(text) {
     const t = (text || "").toLowerCase();
-
     const wants = [];
     const pushIf = (needle, label) => (t.includes(needle) ? wants.push(label) : null);
 
@@ -260,13 +293,21 @@
   }
 
   function suggestPages(level) {
+    const t = TIERS[level];
+    if (t && typeof t.pages === "number") {
+      // Still return a sensible list; tier.pages is more of a cap.
+      if (level === "starter") return ["Home", "Services", "Contact"];
+      if (level === "pro") return ["Home", "Services", "About", "Pricing", "FAQs", "Contact"];
+      return ["Home", "Services", "About", "Pricing", "Case Studies", "FAQs", "Contact", "Book/Apply"];
+    }
     if (level === "starter") return ["Home", "Services", "Contact"];
     if (level === "pro") return ["Home", "Services", "About", "Pricing", "FAQs", "Contact"];
     return ["Home", "Services", "About", "Pricing", "Case Studies", "FAQs", "Contact", "Book/Apply"];
   }
 
   function generateBrief() {
-    if (!consent.checked) {
+    const requireConsent = !!(CFG.safety && CFG.safety.requireConsent);
+    if (requireConsent && !consent.checked) {
       briefOut.textContent = "Please check the consent box first.";
       return;
     }
@@ -277,43 +318,111 @@
       return;
     }
 
-    const tierVal = tier.value;
+    const tierVal = tierSel.value;
     const ind = (industry.value || "").trim() || "General";
+    const tierInfo = TIERS[tierVal] || {};
+
     const goals = extractGoals(vision);
     const pages = suggestPages(tierVal);
 
+    const answers = getInterviewAnswers();
+    const qMap = getQuestionTextMap();
+
+    // Structured JSON output (for CRM / saving)
+    const briefJSON = {
+      projectBrief: {
+        industry: ind,
+        tier: tierVal,
+        vision,
+        interview: Object.keys(answers).map((k) => ({
+          id: k,
+          question: qMap[k] || k,
+          answer: answers[k] || ""
+        })),
+        detectedGoals: goals,
+        tierPackage: {
+          label: tierInfo.label || tierVal,
+          pages: tierInfo.pages || null,
+          features: tierInfo.features || [],
+          cta: tierInfo.cta || "",
+          upsell: tierInfo.upsell || null
+        },
+        suggestedPages: pages,
+        callsToAction: {
+          primary: tierInfo.cta || "Get Started / Book Call / Buy Plan",
+          secondary: "View Work / Pricing / Contact"
+        },
+        clientNeeds: [
+          "Business name + logo (or request logo)",
+          "Services list + pricing (if public)",
+          "Photos (or request stock images)",
+          "Preferred domain + contact email"
+        ],
+        nextSteps: [
+          "Confirm scope",
+          "Collect deposit",
+          "Schedule kickoff"
+        ]
+      }
+    };
+
+    // Human brief
+    const interviewLines = Object.keys(answers)
+      .filter((k) => (answers[k] || "").trim())
+      .map((k) => `- ${qMap[k] || k}: ${answers[k].trim()}`)
+      .join("\n");
+
+    const tierFeatureLines = (tierInfo.features && tierInfo.features.length)
+      ? tierInfo.features.map(f => `- ${f}`).join("\n")
+      : "- (Not specified)";
+
     const brief = [
       `PROJECT BRIEF — ${ind}`,
-      `Tier: ${tierVal.toUpperCase()}`,
+      `Tier: ${String(tierVal).toUpperCase()}${tierInfo.label ? ` (${tierInfo.label})` : ""}`,
       ``,
       `1) Vision (raw input)`,
       vision,
       ``,
-      `2) Goals / Features`,
+      `2) Quick Interview`,
+      interviewLines || "- (Skipped)",
+      ``,
+      `3) Goals / Features (detected)`,
       goals.length ? goals.map((g) => `- ${g}`).join("\n") : "- (Not specified — will confirm in kickoff)",
       ``,
-      `3) Suggested Pages`,
+      `4) Tier Package Includes`,
+      tierFeatureLines,
+      ``,
+      `5) Suggested Pages`,
       pages.map((p) => `- ${p}`).join("\n"),
       ``,
-      `4) Style Direction (fill during kickoff)`,
+      `6) Style Direction (fill during kickoff)`,
       `- Colors:`,
       `- Fonts:`,
       `- Brand vibe:`,
       ``,
-      `5) Calls-To-Action`,
-      `- Primary: Get Started / Book Call / Buy Plan`,
+      `7) Calls-To-Action`,
+      `- Primary: ${tierInfo.cta || "Get Started / Book Call / Buy Plan"}`,
       `- Secondary: View Work / Pricing / Contact`,
       ``,
-      `6) Needed From Client`,
+      `8) Needed From Client`,
       `- Business name + logo (or request logo)`,
       `- Services list + pricing (if public)`,
       `- Photos (or request stock images)`,
       `- Preferred domain + contact email`,
       ``,
-      `Next step: confirm scope + collect deposit + schedule build kickoff.`,
+      tierInfo.upsell ? `Upsell note: ${tierInfo.upsell}` : `Upsell note: —`,
+      ``,
+      `Next step: confirm scope + collect deposit + schedule build kickoff.`
     ].join("\n");
 
     briefOut.textContent = brief;
+
+    if (jsonOut) {
+      const jsonText = safeJSON(briefJSON);
+      jsonOut.textContent = jsonText;
+      try { localStorage.setItem(BRIEF_KEY, jsonText); } catch (_) {}
+    }
+
     btnCopyBrief.disabled = false;
     btnDownloadBrief.disabled = false;
   }
@@ -353,8 +462,10 @@
     inputText.value = "";
     liveText.textContent = "—";
     briefOut.textContent = "Nothing yet.";
+    if (jsonOut) jsonOut.textContent = "—";
     btnCopyBrief.disabled = true;
     btnDownloadBrief.disabled = true;
+    try { localStorage.removeItem(BRIEF_KEY); } catch(_) {}
     saveDraft();
     updateWordCount();
     pushUndoSnapshot();
@@ -376,7 +487,6 @@
   btnCopyBrief.addEventListener("click", copyBrief);
   btnDownloadBrief.addEventListener("click", downloadBrief);
 
-  // Autosave typing
   inputText.addEventListener("input", () => {
     pushUndoSnapshot();
     updateWordCount();
