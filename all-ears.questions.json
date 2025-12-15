@@ -1,0 +1,34 @@
+{
+  "coreQuestions": [
+    {
+      "id": "business_type",
+      "question": "What type of business is this website for?",
+      "extract": ["industry", "niche"]
+    },
+    {
+      "id": "primary_goal",
+      "question": "What should this website help you achieve?",
+      "examples": ["get leads", "sell online", "book appointments", "build trust"]
+    },
+    {
+      "id": "target_customer",
+      "question": "Who is your ideal customer?",
+      "extract": ["demographics", "pain_points"]
+    },
+    {
+      "id": "features",
+      "question": "What features do you want on the website?",
+      "examples": ["booking", "payments", "gallery", "reviews", "AI chat"]
+    },
+    {
+      "id": "style",
+      "question": "How should the site feel visually?",
+      "examples": ["modern", "luxury", "dark", "playful", "corporate"]
+    },
+    {
+      "id": "timeline",
+      "question": "When do you want this website live?",
+      "extract": ["deadline"]
+    }
+  ]
+}
