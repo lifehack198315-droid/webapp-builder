@@ -1,83 +1,270 @@
-<section class="card hero">
-  <h1>AI All Ears 🎧</h1>
-  <p>Talk or type. We convert it into a build-ready project brief.</p>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI All Ears | Business Savvy Website Builder</title>
+  <meta name="description" content="Talk or type your vision. AI All Ears turns ideas into a build-ready website brief with tier-based packages." />
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-  <div class="toolbar">
-    <select id="lang" class="input">
-      <option value="en-US">English (US)</option>
-      <option value="en-GB">English (UK)</option>
-      <option value="es-US">Spanish (US)</option>
-    </select>
+<body>
+  <div class="page">
 
-    <label class="checkbox">
-      <input id="continuous" type="checkbox" checked />
-      <span>Continuous</span>
-    </label>
+    <!-- ================= HEADER ================= -->
+    <header class="site-header">
+      <div class="container nav">
+        <div class="brand">
+          <div class="brand-text">
+            <span class="brand-name">Business Savvy <strong>AI</strong></span>
+            <span class="brand-tagline">AI All Ears — voice or typing, we turn vision into a plan.</span>
+          </div>
+        </div>
 
-    <label class="checkbox">
-      <input id="interim" type="checkbox" checked />
-      <span>Live preview</span>
-    </label>
+        <nav class="main-nav">
+          <a href="index.html">Home</a>
+          <a href="pricing.html">Tiers</a>
+          <a class="active" href="ai-all-ears.html">AI All Ears</a>
+        </nav>
+      </div>
+    </header>
 
-    <div class="counter">
-      <span id="wordCount">0</span> words
-    </div>
+    <!-- ================= MAIN ================= -->
+    <main class="container">
+
+      <!-- ====== HERO / INPUT CARD ====== -->
+      <section class="card hero">
+        <div class="hero-top">
+          <div>
+            <h1>AI All Ears 🎧</h1>
+            <p class="muted">
+              Dreamers can talk it out. Technicals can type it in. Either way, you’ll get a clean project brief you can
+              use to build the website (and choose the perfect tier).
+            </p>
+          </div>
+
+          <div class="hero-badges">
+            <span class="badge" id="badgeMode">Mode: —</span>
+            <span class="badge" id="badgeAutosave">Autosave: —</span>
+            <span class="badge" id="badgeVersion">v—</span>
+          </div>
+        </div>
+
+        <!-- Controls (voice + settings) -->
+        <div class="toolbar">
+          <div class="tool">
+            <label class="label">Language</label>
+            <select id="lang" class="input"></select>
+          </div>
+
+          <div class="tool">
+            <label class="label">Tier</label>
+            <select id="tier" class="input"></select>
+          </div>
+
+          <div class="tool">
+            <label class="label">Industry</label>
+            <input id="industry" class="input" placeholder="credit repair, roofing, salon, coaching…" />
+          </div>
+
+          <div class="tool tool-inline">
+            <label class="checkbox">
+              <input id="continuous" type="checkbox" checked />
+              <span>Continuous</span>
+            </label>
+
+            <label class="checkbox">
+              <input id="interim" type="checkbox" checked />
+              <span>Live preview</span>
+            </label>
+          </div>
+
+          <div class="tool tool-inline">
+            <span class="counter"><span id="wordCount">0</span> words</span>
+          </div>
+        </div>
+
+        <!-- Mic buttons -->
+        <div class="pill-row">
+          <button id="btnStart" class="pill pill-primary" type="button">🎙️ Start</button>
+          <button id="btnStop" class="pill pill-ghost" type="button" disabled>⏹ Stop</button>
+          <button id="btnClear" class="pill pill-ghost" type="button">🧼 Clear</button>
+          <button id="btnUndo" class="pill pill-ghost" type="button" disabled>↩ Undo</button>
+        </div>
+
+        <div class="status">
+          <span id="micDot" class="dot"></span>
+          <span id="statusText">Mic idle</span>
+        </div>
+
+        <!-- Input -->
+        <label class="label">Your Vision</label>
+        <textarea
+          id="inputText"
+          class="textarea"
+          rows="10"
+          placeholder="Example: I need a modern website for my business. I want it dark and premium, with booking, testimonials, and an AI chat helper. I want leads fast…"
+        ></textarea>
+
+        <!-- Live Transcript (interim) -->
+        <div class="liveWrap">
+          <div class="labelRow">
+            <span class="label">Live transcript (not saved until finalized)</span>
+            <button id="btnInsertLive" class="pill pill-ghost" type="button" disabled>➕ Insert Live</button>
+          </div>
+          <div id="liveText" class="liveBox">—</div>
+        </div>
+
+        <!-- AI interview questions (JSON-driven) -->
+        <div class="card card-inner">
+          <h2 class="h2">Quick Interview (optional)</h2>
+          <p class="muted">Answer these and your brief will come out 10x sharper.</p>
+          <div id="questionList" class="qList"></div>
+        </div>
+
+        <!-- Consent -->
+        <label class="checkbox consent">
+          <input id="consent" type="checkbox" />
+          <span id="disclaimerText">I understand this is not medical/legal/financial advice and I won’t share sensitive info.</span>
+        </label>
+
+        <!-- Output actions -->
+        <div class="pill-row">
+          <button id="btnBrief" class="pill pill-primary" type="button">⚡ Generate Project Brief</button>
+          <button id="btnCopyBrief" class="pill" type="button" disabled>📋 Copy Brief</button>
+          <button id="btnDownloadBrief" class="pill pill-ghost" type="button" disabled>⬇ Download .txt</button>
+        </div>
+      </section>
+
+      <!-- ====== BRIEF OUTPUT ====== -->
+      <section class="card">
+        <div class="section-head">
+          <h2>Your Build-Ready Brief</h2>
+          <p class="muted">This is what you (or your team) can build from immediately.</p>
+        </div>
+        <pre id="briefOut" class="pre">Nothing yet — talk or type above, then click “Generate Project Brief.”</pre>
+      </section>
+
+      <!-- ====== JSON DEBUG (optional) ====== -->
+      <section class="card">
+        <div class="section-head">
+          <h2>Structured Data (JSON)</h2>
+          <p class="muted">Perfect for saving to a CRM, Notion, Airtable, etc.</p>
+        </div>
+        <pre id="jsonOut" class="pre">—</pre>
+      </section>
+
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="site-footer">
+      <div class="container">
+        <small>© <span id="year"></span> Business Savvy AI</small>
+      </div>
+    </footer>
+
   </div>
 
-  <div class="pill-row">
-    <button id="btnStart" class="pill pill-primary">🎙️ Start</button>
-    <button id="btnStop" class="pill pill-ghost" disabled>⏹ Stop</button>
-    <button id="btnClear" class="pill pill-ghost">🧼 Clear</button>
-    <button id="btnUndo" class="pill pill-ghost" disabled>↩ Undo</button>
-  </div>
+  <!-- ================= JSON LOADER (NO BUILD TOOLS NEEDED) ================= -->
+  <script>
+    // Loads JSON files and exposes them globally for all-ears.js
+    async function loadJSON(url) {
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) throw new Error(`Failed to load ${url}: ${res.status}`);
+      return res.json();
+    }
 
-  <div class="status">
-    <span id="micDot" class="dot"></span>
-    <span id="statusText">Mic idle</span>
-  </div>
+    (async () => {
+      try {
+        window.ALL_EARS = window.ALL_EARS || {};
+        const [config, tiers, questions] = await Promise.all([
+          loadJSON("./all-ears.config.json"),
+          loadJSON("./tiers.json"),
+          loadJSON("./all-ears.questions.json")
+        ]);
 
-  <label class="label">Your Vision</label>
-  <textarea id="inputText" class="textarea" rows="10"
-    placeholder="Describe your business + the website you want…"></textarea>
+        window.ALL_EARS.config = config;
+        window.ALL_EARS.tiers = tiers;
+        window.ALL_EARS.questions = questions;
 
-  <div class="liveWrap">
-    <div class="labelRow">
-      <span class="label">Live transcript (not saved until finalized)</span>
-      <button id="btnInsertLive" class="pill pill-ghost" disabled>➕ Insert Live</button>
-    </div>
-    <div id="liveText" class="liveBox">—</div>
-  </div>
+        // Stamp UI
+        document.getElementById("year").textContent = new Date().getFullYear();
+        document.getElementById("badgeMode").textContent =
+          "Modes: " + (config?.app?.modes ? config.app.modes.join(", ") : "—");
+        document.getElementById("badgeAutosave").textContent =
+          "Autosave: " + (config?.app?.autosave ? "On" : "Off");
+        document.getElementById("badgeVersion").textContent = "v" + (config?.app?.version || "—");
+        document.getElementById("disclaimerText").textContent =
+          config?.safety?.disclaimer || document.getElementById("disclaimerText").textContent;
 
-  <div class="grid2">
-    <div>
-      <label class="label">Tier</label>
-      <select id="tier" class="input">
-        <option value="starter">Starter (1–3 pages)</option>
-        <option value="pro">Pro (5–7 pages + automation)</option>
-        <option value="elite">Elite (custom build + brand)</option>
-      </select>
-    </div>
-    <div>
-      <label class="label">Industry</label>
-      <input id="industry" class="input" placeholder="credit repair, roofing, salon…" />
-    </div>
-  </div>
+        // Populate languages
+        const langSel = document.getElementById("lang");
+        const langs = config?.input?.supportedLanguages || ["en-US"];
+        const defaultLang = config?.app?.defaultLanguage || langs[0];
 
-  <label class="checkbox">
-    <input id="consent" type="checkbox" />
-    <span>I won’t share sensitive info. I understand this is not medical/legal advice.</span>
-  </label>
+        langSel.innerHTML = "";
+        langs.forEach(code => {
+          const opt = document.createElement("option");
+          opt.value = code;
+          opt.textContent = code;
+          if (code === defaultLang) opt.selected = true;
+          langSel.appendChild(opt);
+        });
 
-  <div class="pill-row">
-    <button id="btnBrief" class="pill pill-primary">⚡ Generate Project Brief</button>
-    <button id="btnCopyBrief" class="pill" disabled>📋 Copy Brief</button>
-    <button id="btnDownloadBrief" class="pill pill-ghost" disabled>⬇ Download .txt</button>
-  </div>
-</section>
+        // Populate tiers
+        const tierSel = document.getElementById("tier");
+        const tierMap = tiers?.tiers || {};
+        const tierKeys = Object.keys(tierMap);
 
-<section class="card">
-  <h2>Your Build-Ready Brief</h2>
-  <pre id="briefOut" class="pre">Nothing yet.</pre>
-</section>
+        tierSel.innerHTML = "";
+        tierKeys.forEach(key => {
+          const opt = document.createElement("option");
+          opt.value = key;
+          opt.textContent = `${tierMap[key].label} (${tierMap[key].pages} pages)`;
+          tierSel.appendChild(opt);
+        });
 
-<script defer src="all-ears.js"></script>
+        // Render interview questions
+        const qWrap = document.getElementById("questionList");
+        const qList = questions?.coreQuestions || [];
+        qWrap.innerHTML = "";
+
+        qList.forEach(q => {
+          const row = document.createElement("div");
+          row.className = "qRow";
+          row.innerHTML = `
+            <div class="qPrompt">
+              <div class="qTitle">${q.question}</div>
+              ${q.examples ? `<div class="qExamples">Examples: ${q.examples.join(", ")}</div>` : ""}
+            </div>
+            <input class="input qInput" data-qid="${q.id}" placeholder="Type your answer…" />
+          `;
+          qWrap.appendChild(row);
+        });
+
+        // Finally load app logic
+        const s = document.createElement("script");
+        s.src = "./all-ears.js";
+        s.defer = true;
+        document.body.appendChild(s);
+
+      } catch (err) {
+        console.error(err);
+        document.body.innerHTML = `
+          <div style="padding:24px;font-family:system-ui">
+            <h2>AI All Ears failed to load</h2>
+            <p>One of the JSON files could not be loaded. Make sure these files exist next to this page:</p>
+            <ul>
+              <li>all-ears.config.json</li>
+              <li>tiers.json</li>
+              <li>all-ears.questions.json</li>
+              <li>all-ears.js</li>
+            </ul>
+            <pre>${String(err)}</pre>
+          </div>
+        `;
+      }
+    })();
+  </script>
+</body>
+</html>
