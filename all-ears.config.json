@@ -1,0 +1,25 @@
+{
+  "app": {
+    "name": "AI All Ears",
+    "version": "1.0.0",
+    "description": "Business-savvy AI that listens to ideas and converts them into build-ready website briefs.",
+    "modes": ["voice", "text"],
+    "defaultLanguage": "en-US",
+    "autosave": true
+  },
+  "input": {
+    "allowVoice": true,
+    "allowText": true,
+    "maxCharacters": 8000,
+    "supportedLanguages": ["en-US", "en-GB", "es-US"]
+  },
+  "safety": {
+    "requireConsent": true,
+    "blockedContent": ["medical diagnosis", "legal advice", "financial guarantees"],
+    "disclaimer": "AI All Ears is a planning assistant and does not provide legal, medical, or financial advice."
+  },
+  "storage": {
+    "draftKey": "all_ears_draft_v1",
+    "briefKey": "all_ears_brief_v1"
+  }
+}
