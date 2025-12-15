@@ -1,0 +1,24 @@
+{
+  "sessionId": "ae-839201",
+  "inputMode": "voice",
+  "rawInput": "I want a modern website for my credit repair business with booking and AI chat.",
+  "detectedIndustry": "Credit Repair",
+  "selectedTier": "pro",
+  "detectedFeatures": ["booking", "ai"],
+  "generatedBrief": {
+    "industry": "Credit Repair",
+    "tier": "Pro",
+    "vision": "Modern, trustworthy website for a credit repair company.",
+    "features": ["Booking system", "AI chat assistant"],
+    "pages": ["Home", "Services", "About", "Pricing", "FAQs", "Contact"],
+    "style": {
+      "colors": "Dark blue, silver, white",
+      "fonts": "Modern sans-serif",
+      "vibe": "Professional, confident, fintech"
+    },
+    "callsToAction": {
+      "primary": "Book a Consultation",
+      "secondary": "Learn More"
+    }
+  }
+}
