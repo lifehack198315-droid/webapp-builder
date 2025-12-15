@@ -2,284 +2,224 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AI All Ears | Business Savvy Website Builder</title>
-  <meta name="description" content="Talk or type your vision. AI All Ears turns ideas into a build-ready website brief with tier-based packages." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Talk or type your vision. AI All Ears converts it into a build-ready website project brief." />
+
+  <!-- STYLE -->
   <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* minimal fallback styles so page never breaks */
+    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif; margin:0; background:#0b0f1a; color:#eaeaf0; }
+    .container { max-width:1200px; margin:auto; padding:24px; }
+    .card { background:#11162a; border-radius:18px; padding:24px; margin-bottom:24px; }
+    .card-inner { margin-top:20px; background:#0d1224; }
+    .pill-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
+    .pill { padding:12px 18px; border-radius:999px; border:none; cursor:pointer; font-weight:600; }
+    .pill-primary { background:#4f7cff; color:#fff; }
+    .pill-ghost { background:transparent; border:1px solid #2a3566; color:#cfd6ff; }
+    .input, .textarea, select { width:100%; padding:12px; border-radius:12px; border:1px solid #2a3566; background:#0b0f1a; color:#fff; }
+    .label { font-weight:600; margin:12px 0 6px; display:block; }
+    .checkbox { display:flex; gap:10px; align-items:center; margin-top:12px; }
+    .toolbar { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin:16px 0; }
+    .status { margin-top:10px; display:flex; align-items:center; gap:8px; }
+    .dot { width:10px; height:10px; border-radius:50%; background:#555; }
+    .dot.on { background:#3cff9a; box-shadow:0 0 10px #3cff9a; }
+    .liveBox, pre { background:#070b16; padding:14px; border-radius:12px; border:1px solid #2a3566; white-space:pre-wrap; }
+    .hero-top { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+    .badge { background:#1b2350; padding:6px 12px; border-radius:999px; font-size:12px; }
+    .hero-badges { display:flex; gap:8px; flex-wrap:wrap; }
+    .qRow { margin-bottom:14px; }
+    footer { text-align:center; opacity:.7; padding:24px 0; }
+  </style>
 </head>
 
 <body>
-  <div class="page">
 
-    <header class="site-header">
-      <div class="container nav">
-        <div class="brand">
-          <div class="brand-text">
-            <span class="brand-name">Business Savvy <strong>AI</strong></span>
-            <span class="brand-tagline">AI All Ears — voice or typing, we turn vision into a plan.</span>
-          </div>
+<div class="page">
+
+  <!-- ================= HEADER ================= -->
+  <header class="card">
+    <div class="container">
+      <h2>Business Savvy <strong>AI</strong></h2>
+      <p>AI All Ears — turn ideas into build-ready website plans</p>
+    </div>
+  </header>
+
+  <!-- ================= MAIN ================= -->
+  <main class="container">
+
+    <!-- ================= HERO ================= -->
+    <section class="card hero">
+
+      <div class="hero-top">
+        <div>
+          <h1>AI All Ears 🎧</h1>
+          <p>Dreamers talk. Technicals type. You get a clean project brief.</p>
         </div>
-        <nav class="main-nav">
-          <a href="index.html">Home</a>
-          <a href="pricing.html">Tiers</a>
-          <a class="active" href="ai-all-ears.html">AI All Ears</a>
-        </nav>
+        <div class="hero-badges">
+          <span class="badge" id="badgeMode">Modes: voice, text</span>
+          <span class="badge" id="badgeAutosave">Autosave: On</span>
+          <span class="badge" id="badgeVersion">v1.0</span>
+        </div>
       </div>
-    </header>
 
-    <main class="container">
-
-      <section class="card hero">
-        <div class="hero-top">
-          <div>
-            <h1>AI All Ears 🎧</h1>
-            <p class="muted">
-              Dreamers can talk it out. Technicals can type it in. Either way, you’ll get a clean project brief.
-            </p>
-          </div>
-          <div class="hero-badges">
-            <span class="badge" id="badgeMode">Mode: —</span>
-            <span class="badge" id="badgeAutosave">Autosave: —</span>
-            <span class="badge" id="badgeVersion">v—</span>
-          </div>
+      <!-- SETTINGS -->
+      <div class="toolbar">
+        <div>
+          <label class="label">Language</label>
+          <select id="lang"></select>
         </div>
 
-        <div class="toolbar">
-          <div class="tool">
-            <label class="label">Language</label>
-            <select id="lang" class="input"></select>
-          </div>
-
-          <div class="tool">
-            <label class="label">Tier</label>
-            <select id="tier" class="input"></select>
-          </div>
-
-          <div class="tool">
-            <label class="label">Industry</label>
-            <input id="industry" class="input" placeholder="credit repair, roofing, salon, coaching…" />
-          </div>
-
-          <div class="tool tool-inline">
-            <label class="checkbox">
-              <input id="continuous" type="checkbox" checked />
-              <span>Continuous</span>
-            </label>
-
-            <label class="checkbox">
-              <input id="interim" type="checkbox" checked />
-              <span>Live preview</span>
-            </label>
-          </div>
-
-          <div class="tool tool-inline">
-            <span class="counter"><span id="wordCount">0</span> words</span>
-          </div>
+        <div>
+          <label class="label">Tier</label>
+          <select id="tier"></select>
         </div>
 
-        <div class="pill-row">
-          <button id="btnStart" class="pill pill-primary" type="button">🎙️ Start</button>
-          <button id="btnStop" class="pill pill-ghost" type="button" disabled>⏹ Stop</button>
-          <button id="btnClear" class="pill pill-ghost" type="button">🧼 Clear</button>
-          <button id="btnUndo" class="pill pill-ghost" type="button" disabled>↩ Undo</button>
+        <div>
+          <label class="label">Industry</label>
+          <input id="industry" class="input" placeholder="credit repair, agency, roofing…" />
         </div>
 
-        <div class="status">
-          <span id="micDot" class="dot"></span>
-          <span id="statusText">Mic idle</span>
+        <div>
+          <label class="checkbox">
+            <input id="continuous" type="checkbox" checked /> Continuous
+          </label>
+          <label class="checkbox">
+            <input id="interim" type="checkbox" checked /> Live preview
+          </label>
         </div>
 
-        <label class="label">Your Vision</label>
-        <textarea
-          id="inputText"
-          class="textarea"
-          rows="10"
-          placeholder="Example: I need a modern website for my business… booking, testimonials, AI chat…"
-        ></textarea>
-
-        <div class="liveWrap">
-          <div class="labelRow">
-            <span class="label">Live transcript (not saved until finalized)</span>
-            <button id="btnInsertLive" class="pill pill-ghost" type="button" disabled>➕ Insert Live</button>
-          </div>
-          <div id="liveText" class="liveBox">—</div>
+        <div>
+          <strong><span id="wordCount">0</span> words</strong>
         </div>
-
-        <div class="card card-inner">
-          <h2 class="h2">Quick Interview (optional)</h2>
-          <p class="muted">Answer these and your brief comes out sharper.</p>
-          <div id="questionList" class="qList"></div>
-        </div>
-
-        <label class="checkbox consent">
-          <input id="consent" type="checkbox" />
-          <span id="disclaimerText">I understand this is not medical/legal/financial advice and I won’t share sensitive info.</span>
-        </label>
-
-        <div class="pill-row">
-          <button id="btnBrief" class="pill pill-primary" type="button">⚡ Generate Project Brief</button>
-          <button id="btnCopyBrief" class="pill" type="button" disabled>📋 Copy Brief</button>
-          <button id="btnDownloadBrief" class="pill pill-ghost" type="button" disabled>⬇ Download .txt</button>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2>Your Build-Ready Brief</h2>
-        <pre id="briefOut" class="pre">Nothing yet — talk or type above, then click “Generate Project Brief.”</pre>
-      </section>
-
-      <section class="card">
-        <h2>Structured Data (JSON)</h2>
-        <pre id="jsonOut" class="pre">—</pre>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="container">
-        <small>© <span id="year"></span> Business Savvy AI</small>
       </div>
-    </footer>
 
-  </div>
+      <!-- MIC CONTROLS -->
+      <div class="pill-row">
+        <button id="btnStart" class="pill pill-primary">🎙️ Start</button>
+        <button id="btnStop" class="pill pill-ghost" disabled>⏹ Stop</button>
+        <button id="btnClear" class="pill pill-ghost">🧼 Clear</button>
+        <button id="btnUndo" class="pill pill-ghost" disabled>↩ Undo</button>
+      </div>
 
-  <!-- ===================== EMBEDDED JSON CONFIG (NO FETCH NEEDED) ===================== -->
+      <div class="status">
+        <span id="micDot" class="dot"></span>
+        <span id="statusText">Mic idle</span>
+      </div>
 
-  <script type="application/json" id="all-ears-config">
-  {
-    "app": {
-      "name": "AI All Ears",
-      "version": "1.0.0",
-      "description": "Business-savvy AI that listens to ideas and converts them into build-ready website briefs.",
-      "modes": ["voice", "text"],
-      "defaultLanguage": "en-US",
-      "autosave": true
-    },
-    "input": {
-      "allowVoice": true,
-      "allowText": true,
-      "maxCharacters": 8000,
-      "supportedLanguages": ["en-US", "en-GB", "es-US"]
-    },
-    "safety": {
-      "requireConsent": true,
-      "blockedContent": ["medical diagnosis", "legal advice", "financial guarantees"],
-      "disclaimer": "AI All Ears is a planning assistant and does not provide legal, medical, or financial advice."
-    },
-    "storage": {
-      "draftKey": "all_ears_draft_v1",
-      "briefKey": "all_ears_brief_v1"
-    }
+      <!-- MAIN INPUT -->
+      <label class="label">Your Vision</label>
+      <textarea id="inputText" class="textarea" rows="8"
+        placeholder="Explain your website idea, features, goals, vibe…"></textarea>
+
+      <!-- LIVE TRANSCRIPT -->
+      <div style="margin-top:16px;">
+        <label class="label">Live transcript</label>
+        <div id="liveText" class="liveBox">—</div>
+        <button id="btnInsertLive" class="pill pill-ghost" disabled style="margin-top:8px;">➕ Insert Live</button>
+      </div>
+
+      <!-- QUICK INTERVIEW -->
+      <div class="card card-inner">
+        <h3>Quick Interview (optional)</h3>
+        <div id="questionList"></div>
+      </div>
+
+      <!-- CONSENT -->
+      <label class="checkbox">
+        <input id="consent" type="checkbox" />
+        I understand this is not medical / legal / financial advice.
+      </label>
+
+      <!-- ACTION BUTTONS -->
+      <div class="pill-row">
+        <button id="btnBrief" class="pill pill-primary">⚡ Generate Project Brief</button>
+        <button id="btnCopyBrief" class="pill" disabled>📋 Copy Brief</button>
+        <button id="btnDownloadBrief" class="pill pill-ghost" disabled>⬇ Download .txt</button>
+      </div>
+
+    </section>
+
+    <!-- ================= OUTPUT ================= -->
+    <section class="card">
+      <h2>Your Build-Ready Brief</h2>
+      <pre id="briefOut">Nothing yet.</pre>
+    </section>
+
+    <section class="card">
+      <h2>Structured JSON</h2>
+      <pre id="jsonOut">—</pre>
+    </section>
+
+  </main>
+
+  <footer>
+    © <span id="year"></span> Business Savvy AI
+  </footer>
+</div>
+
+<!-- ================= EMBEDDED CONFIG ================= -->
+<script type="application/json" id="all-ears-config">
+{
+  "app": { "version": "1.0", "modes": ["voice","text"], "autosave": true, "defaultLanguage": "en-US" },
+  "input": { "supportedLanguages": ["en-US","en-GB","es-US"] },
+  "safety": { "requireConsent": true }
+}
+</script>
+
+<script type="application/json" id="all-ears-tiers">
+{
+  "tiers": {
+    "starter": { "label":"Starter","pages":3,"features":["Basic site","Contact form"],"cta":"Launch Fast" },
+    "pro": { "label":"Pro","pages":7,"features":["Booking","Automation"],"cta":"Scale Business" },
+    "elite": { "label":"Elite","pages":12,"features":["Custom UI","Branding","AI"],"cta":"Build Empire" }
   }
-  </script>
+}
+</script>
 
-  <script type="application/json" id="all-ears-tiers">
-  {
-    "tiers": {
-      "starter": {
-        "label": "Starter",
-        "pages": 3,
-        "features": ["Mobile responsive", "Contact form", "Basic SEO"],
-        "cta": "Launch Fast",
-        "upsell": "Upgrade to Pro for automations and branding"
-      },
-      "pro": {
-        "label": "Pro",
-        "pages": 7,
-        "features": ["Booking or lead forms", "Email automation", "On-page SEO", "Analytics"],
-        "cta": "Scale My Business",
-        "upsell": "Upgrade to Elite for full brand system"
-      },
-      "elite": {
-        "label": "Elite",
-        "pages": 12,
-        "features": ["Custom UI/UX", "Brand identity", "AI assistant integration", "Advanced automations"],
-        "cta": "Build My Empire",
-        "upsell": null
-      }
-    }
-  }
-  </script>
+<script type="application/json" id="all-ears-questions">
+{
+  "coreQuestions": [
+    { "id":"business_type","question":"What is your business?" },
+    { "id":"primary_goal","question":"What should the website achieve?" },
+    { "id":"features","question":"What features must it have?" }
+  ]
+}
+</script>
 
-  <script type="application/json" id="all-ears-questions">
-  {
-    "coreQuestions": [
-      { "id": "business_type", "question": "What type of business is this website for?", "examples": ["credit repair", "barber", "roofing", "cleaning"] },
-      { "id": "primary_goal", "question": "What should this website help you achieve?", "examples": ["get leads", "sell online", "book appointments", "build trust"] },
-      { "id": "target_customer", "question": "Who is your ideal customer?", "examples": ["homeowners", "young professionals", "local clients", "B2B"] },
-      { "id": "features", "question": "What features do you want?", "examples": ["booking", "payments", "gallery", "reviews", "AI chat"] },
-      { "id": "style", "question": "How should the site feel visually?", "examples": ["modern", "luxury", "dark", "playful", "corporate"] },
-      { "id": "timeline", "question": "When do you want this website live?", "examples": ["ASAP", "2 weeks", "next month"] }
-    ]
-  }
-  </script>
+<script>
+  // expose config
+  window.ALL_EARS = {
+    config: JSON.parse(document.getElementById("all-ears-config").textContent),
+    tiers: JSON.parse(document.getElementById("all-ears-tiers").textContent),
+    questions: JSON.parse(document.getElementById("all-ears-questions").textContent)
+  };
 
-  <!-- ===================== CONFIG LOADER (reads JSON above) ===================== -->
-  <script>
-    (function bootConfig() {
-      const parse = (id) => JSON.parse(document.getElementById(id).textContent.trim());
-      window.ALL_EARS = {
-        config: parse("all-ears-config"),
-        tiers: parse("all-ears-tiers"),
-        questions: parse("all-ears-questions")
-      };
+  // populate selects
+  const cfg = ALL_EARS.config;
+  document.getElementById("year").textContent = new Date().getFullYear();
+  cfg.input.supportedLanguages.forEach(l => {
+    const o = document.createElement("option"); o.value = l; o.textContent = l;
+    if (l === cfg.app.defaultLanguage) o.selected = true;
+    lang.appendChild(o);
+  });
+  Object.entries(ALL_EARS.tiers.tiers).forEach(([k,v]) => {
+    const o = document.createElement("option"); o.value=k; o.textContent=`${v.label} (${v.pages} pages)`;
+    tier.appendChild(o);
+  });
+  ALL_EARS.questions.coreQuestions.forEach(q => {
+    const d = document.createElement("div");
+    d.className="qRow";
+    d.innerHTML = `<label class="label">${q.question}</label>
+                   <input class="input qInput" data-qid="${q.id}" />`;
+    questionList.appendChild(d);
+  });
+</script>
 
-      const cfg = window.ALL_EARS.config;
-
-      document.getElementById("year").textContent = new Date().getFullYear();
-      document.getElementById("badgeMode").textContent =
-        "Modes: " + (cfg?.app?.modes ? cfg.app.modes.join(", ") : "—");
-      document.getElementById("badgeAutosave").textContent =
-        "Autosave: " + (cfg?.app?.autosave ? "On" : "Off");
-      document.getElementById("badgeVersion").textContent = "v" + (cfg?.app?.version || "—");
-      document.getElementById("disclaimerText").textContent =
-        cfg?.safety?.disclaimer || document.getElementById("disclaimerText").textContent;
-
-      // Populate languages
-      const langSel = document.getElementById("lang");
-      const langs = cfg?.input?.supportedLanguages || ["en-US"];
-      const defaultLang = cfg?.app?.defaultLanguage || langs[0];
-      langSel.innerHTML = "";
-      langs.forEach(code => {
-        const opt = document.createElement("option");
-        opt.value = code;
-        opt.textContent = code;
-        if (code === defaultLang) opt.selected = true;
-        langSel.appendChild(opt);
-      });
-
-      // Populate tiers
-      const tierSel = document.getElementById("tier");
-      const tierMap = window.ALL_EARS.tiers?.tiers || {};
-      tierSel.innerHTML = "";
-      Object.keys(tierMap).forEach(key => {
-        const opt = document.createElement("option");
-        opt.value = key;
-        opt.textContent = `${tierMap[key].label} (${tierMap[key].pages} pages)`;
-        tierSel.appendChild(opt);
-      });
-
-      // Render questions
-      const qWrap = document.getElementById("questionList");
-      const qList = window.ALL_EARS.questions?.coreQuestions || [];
-      qWrap.innerHTML = "";
-      qList.forEach(q => {
-        const row = document.createElement("div");
-        row.className = "qRow";
-        row.innerHTML = `
-          <div class="qPrompt">
-            <div class="qTitle">${q.question}</div>
-            ${q.examples ? `<div class="qExamples">Examples: ${q.examples.join(", ")}</div>` : ""}
-          </div>
-          <input class="input qInput" data-qid="${q.id}" placeholder="Type your answer…" />
-        `;
-        qWrap.appendChild(row);
-      });
-    })();
-  </script>
-
-  <!-- Your main logic file (the JS I gave you earlier) -->
-  <script defer src="./all-ears.js"></script>
+<!-- ================= MAIN LOGIC ================= -->
+<script defer src="all-ears.js"></script>
 
 </body>
 </html>
-
